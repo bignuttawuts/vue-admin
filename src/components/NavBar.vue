@@ -59,13 +59,15 @@
       </div>
     </div>
 
-    <DisclosurePanel class="md:hidden">
+    <DisclosurePanel class="md:hidden" v-slot="{ close }">
       <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-        <DisclosureButton v-for="item in navigation" :key="item.name" as="div"
+        {({ close }) => (
+        <DisclosureButton v-for="item in navigation" :key="item.name" as="div" @click='view(item.href, close)'
           :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
           :aria-current="item.current ? 'page' : undefined">
-          <RouterLink :to="item.href">{{ item.name }}</RouterLink>
+          {{ item.name }}
         </DisclosureButton>
+        )}
       </div>
       <div class="border-t border-gray-700 pb-3 pt-4">
         <div class="flex items-center px-5">
@@ -95,6 +97,7 @@
 <script setup lang="ts">
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import router from "@/router";
 
 const user = {
   name: 'Tom Cook',
@@ -115,4 +118,9 @@ const userNavigation = [
   { name: 'Settings', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
+
+const view = (path: string, close: any) => {
+  router.push(path)
+  close()
+}
 </script>
